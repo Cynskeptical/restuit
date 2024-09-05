@@ -1,20 +1,32 @@
-name: RESTUIT Auto Reply  # Cambiamos el nombre descriptivo del flujo de trabajo
+name: RESTUIT Auto Reply
 
 on:
-  workflow_dispatch:  # Esto permite ejecutar el flujo manualmente o por Webhooks
+  schedule:
+    - cron: '*/30 * * * *'  # Ejecutar cada 30 minutos
+  workflow_dispatch:  # Permite ejecutar el flujo manualmente desde GitHub
 
 jobs:
-  reply_to_tweet:
+  reply_to_mentions:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository content
-        uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      
-      - name: Run RESTUIT auto-reply script
-        run: |
-          python3 restuit_reply.py  # Aquí hemos cambiado el nombre del script a "restuit_reply.py"
+    - name: Checkout repository content
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install tweepy
+
+    - name: Run RESTUIT script
+      env:
+        TWITTER_CONSUMER_KEY: 'tYEkW50YVJh767fIZjcFUy7iD'
+        TWITTER_CONSUMER_SECRET: '3ABDOkjqWjFQCYzvNbZ9FtelSGfwPYS85XKR9gpfFj3HRtEaRC'
+        TWITTER_ACCESS_TOKEN: '1445541467175337994-vH5ctinZJMkB4Nqsv4uTHNfx82DH4N'
+        TWITTER_ACCESS_TOKEN_SECRET: 'jwLL8WrleRoo8IPSlDOqslDW2UJhsj5bEIWpSj7yT1HCi'
+      run: |
+        python3 restuit_reply.py
