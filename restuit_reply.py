@@ -11,24 +11,26 @@ access_token_secret = 'jwLL8WrleRoo8IPSlDOqslDW2UJhsj5bEIWpSj7yT1HCi'
 auth = tweepy.OAuth1UserHandler(consumer_key, consumer_secret, access_token, access_token_secret)
 api = tweepy.API(auth)
 
-# Aquí procesaremos el tweet para generar la respuesta
+# Procesar la mención y generar una respuesta ingeniosa
 def process_tweet(mention_text, user_name):
-    response = ""
     if "brillante" in mention_text.lower():
-        response = f"@{user_name} ¡Oh, gracias por iluminarme con tu sabiduría brillante! #Ironía"
+        response = f"@{user_name} Oh, claro, soy tan brillante que necesito gafas de sol para verme. #Ironía"
     elif "genio" in mention_text.lower():
-        response = f"@{user_name} ¡Qué humilde eres, me haces sentir tan pequeño! #Sarcasmo"
+        response = f"@{user_name} Si fuera un genio, ya habría pedido tres deseos... ¿tienes alguno tú? #Sarcasmo"
+    elif "gracias" in mention_text.lower():
+        response = f"@{user_name} ¡Oh, no me agradezcas, que después me malacostumbro! #OJO"
     else:
-        response = f"@{user_name} ¡Gracias por la mención! Ahora cuéntame algo más interesante. #OJO"
-    
+        response = f"@{user_name} Interesante, pero creo que aún puedo escuchar los grillos... cuéntame algo más jugoso. #Ingenio"
     return response
 
-# Simulamos que recibimos una mención de Twitter (esto lo recibirás desde IFTTT)
-mention_text = os.getenv('MENTION_TEXT')  # Texto del tweet enviado desde IFTTT
-user_name = os.getenv('MENTION_USER')  # Nombre de usuario del que te mencionó
+# Obtener las últimas 5 menciones
+mentions = api.mentions_timeline(count=5)
 
-# Generar la respuesta según la mención
-tweet_response = process_tweet(mention_text, user_name)
-
-# Enviar la respuesta a Twitter
-api.update_status(tweet_response)
+# Responder a cada mención con un toque ingenioso
+for mention in mentions:
+    user_name = mention.user.screen_name
+    mention_text = mention.text
+    tweet_response = process_tweet(mention_text, user_name)
+    
+    # Publicar la respuesta en Twitter
+    api.update_status(tweet_response, in_reply_to_status_id=mention.id)
