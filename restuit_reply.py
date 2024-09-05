@@ -1,11 +1,11 @@
 import tweepy
 import os
 
-# Credenciales de Twitter desde los secrets en GitHub (estas se deben almacenar como variables de entorno o usarlas directamente si no usas secrets)
-consumer_key = 'tYEkW50YVJh767fIZjcFUy7iD'
-consumer_secret = '3ABDOkjqWjFQCYzvNbZ9FtelSGfwPYS85XKR9gpfFj3HRtEaRC'
-access_token = '1445541467175337994-vH5ctinZJMkB4Nqsv4uTHNfx82DH4N'
-access_token_secret = 'jwLL8WrleRoo8IPSlDOqslDW2UJhsj5bEIWpSj7yT1HCi'
+# Credenciales de Twitter desde los secrets en GitHub
+consumer_key = os.getenv('TWITTER_CONSUMER_KEY')
+consumer_secret = os.getenv('TWITTER_CONSUMER_SECRET')
+access_token = os.getenv('TWITTER_ACCESS_TOKEN')
+access_token_secret = os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
 
 # Autenticación con la API de Twitter usando Tweepy
 auth = tweepy.OAuth1UserHandler(consumer_key, consumer_secret, access_token, access_token_secret)
@@ -24,7 +24,9 @@ def process_tweet(mention_text, user_name):
     return response
 
 # Obtener las últimas 5 menciones
+print("Iniciando el bot de Twitter...")
 mentions = api.mentions_timeline(count=5)
+print(f"Se encontraron {len(mentions)} menciones.")
 
 # Responder a cada mención con un toque ingenioso
 for mention in mentions:
@@ -34,3 +36,4 @@ for mention in mentions:
     
     # Publicar la respuesta en Twitter
     api.update_status(tweet_response, in_reply_to_status_id=mention.id)
+    print(f"Respuesta enviada a {user_name}: {tweet_response}")
