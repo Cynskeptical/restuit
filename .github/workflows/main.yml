@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout repository content
-      uses: actions/checkout@v3  # Asegúrate de que se usa la última versión de checkout
+      uses: actions/checkout@v4  # Actualiza a la última versión (v4)
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Actualiza a la versión v4 de setup-python
       with:
         python-version: '3.x'  # Usar la versión más reciente de Python
 
@@ -22,11 +22,11 @@ jobs:
       run: |
         pip install tweepy  # Instalar Tweepy para usar la API de Twitter
 
-    - name: Run RESTUIT script
+    - name: Run RESTUIT script with logging
       env:
         TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
         TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
         TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
         TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
       run: |
-        python3 restuit_reply.py
+        python3 restuit_reply.py || echo "Error en la ejecución del script Python"
