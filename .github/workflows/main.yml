@@ -3,7 +3,7 @@ name: RESTUIT Auto Reply
 on:
   schedule:
     - cron: '*/30 * * * *'  # Ejecutar cada 30 minutos
-  workflow_dispatch:  # Permite ejecutar el flujo manualmente desde GitHub
+  workflow_dispatch:  # Permite ejecutar manualmente desde GitHub
 
 jobs:
   reply_to_mentions:
@@ -11,16 +11,21 @@ jobs:
 
     steps:
     - name: Checkout repository content
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  # Actualiza a la última versión de la acción de checkout
 
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.x'  # Usar la versión más reciente de Python
+
+    - name: Setup Node.js  # Paso para actualizar Node.js si es necesario
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # Usar la versión más reciente de Node.js (puedes ajustar según sea necesario)
 
     - name: Install dependencies
       run: |
-        pip install tweepy
+        pip install tweepy  # Instalar Tweepy para usar la API de Twitter
 
     - name: Run RESTUIT script
       env:
