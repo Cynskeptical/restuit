@@ -1,0 +1,20 @@
+name: RESTUIT Auto Reply  # Cambiamos el nombre descriptivo del flujo de trabajo
+
+on:
+  workflow_dispatch:  # Esto permite ejecutar el flujo manualmente o por Webhooks
+
+jobs:
+  reply_to_tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository content
+        uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      
+      - name: Run RESTUIT auto-reply script
+        run: |
+          python3 restuit_reply.py  # Aquí hemos cambiado el nombre del script a "restuit_reply.py"
